@@ -1,0 +1,57 @@
+<style>
+    .apple-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .highlight {
+        position: absolute;
+        border: 2px solid yellow;
+        pointer-events: none;
+        display: none;
+        transition: opacity 0.3s ease;
+    }
+</style>
+
+<div class="apple-container">
+    <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+        <image xlink:href="./doge.jpg" width="400" height="300" />
+        <polygon
+            points='212,176 201,174 188,177 184,188 188,203 198,215 213,218 227,213 232,198 238,188 233,182 210,179'
+            id="apple-shape" data-info="Apple Info">
+        </polygon>
+    </svg>
+    <div class="highlight" id="highlight"></div>
+</div>
+<script>
+    const XYArray = []
+    document.addEventListener('DOMContentLoaded', function () {
+        const appleContainer = document.querySelector('.apple-container');
+        const highlight = document.getElementById('highlight');
+        const appleShape = document.getElementById('apple-shape');
+        appleContainer.addEventListener('click', function (event) {
+            const containerRect = appleContainer.getBoundingClientRect();
+            const clickX = event.clientX - containerRect.left;
+            const clickY = event.clientY - containerRect.top;
+            XYArray.push(`${clickX},${clickY}`)
+            console.log(XYArray, "XYArray")
+            console.log(XYArray.join(" "), "XYArrayJoin")
+        });
+        document.addEventListener('mousemove', function (event) {
+            const bbox = appleShape.getBBox();
+            if (event.pageX >= bbox.x && event.pageX <= bbox.x + bbox.width &&
+                event.pageY >= bbox.y && event.pageY <= bbox.y + bbox.height) {
+                highlight.style.width = bbox.width + 'px';
+                highlight.style.height = bbox.height + 'px';
+                highlight.style.left = bbox.x + 'px';
+                highlight.style.top = bbox.y + 'px';
+                highlight.style.display = 'block';
+                const info = appleShape.getAttribute('data-info');
+                highlight.style.opacity = '1';
+            } else {
+                highlight.style.opacity = '0';
+            }
+        });
+    });
+
+</script>

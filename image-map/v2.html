@@ -1,0 +1,55 @@
+<style>
+    .apple-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .highlight {
+        position: absolute;
+        border: 2px solid yellow;
+        /* 高亮样式 */
+        pointer-events: none;
+        /* 防止高亮区域影响鼠标事件 */
+        display: none;
+        /* 默认隐藏 */
+    }
+</style>
+
+<div class="apple-container">
+    <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+        <!-- 嵌入图片 -->
+        <image xlink:href="./doge.jpg" width="400" height="300" />
+        <polygon points="100,10 40,198 190,78 10,78 160,198" id="apple-shape" data-info="Apple Info">
+        </polygon>
+    </svg>
+    <div class="highlight" id="highlight"></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const highlight = document.getElementById('highlight');
+        const appleShape = document.getElementById('apple-shape');
+
+        // 监听鼠标移动事件
+        document.addEventListener('mousemove', function (event) {
+            // 获取多边形的边界框
+            const bbox = appleShape.getBBox();
+
+            // 判断鼠标是否在多边形区域内
+            if (event.pageX >= bbox.x && event.pageX <= bbox.x + bbox.width &&
+                event.pageY >= bbox.y && event.pageY <= bbox.y + bbox.height) {
+                highlight.style.width = bbox.width + 'px';
+                highlight.style.height = bbox.height + 'px';
+                highlight.style.left = bbox.x + 'px';
+                highlight.style.top = bbox.y + 'px';
+                highlight.style.display = 'block';
+
+                // 可以在这里处理高亮效果或其他操作
+                const info = appleShape.getAttribute('data-info');
+                console.log('Mouse over irregular shape:', info);
+            } else {
+                highlight.style.display = 'none';
+            }
+        });
+    });
+</script>

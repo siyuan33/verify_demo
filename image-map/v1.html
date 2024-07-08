@@ -1,0 +1,87 @@
+<style>
+    .apple-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .apple-img {
+        display: block;
+    }
+
+    .highlight {
+        position: absolute;
+        border: 2px solid yellow;
+        /* 高亮样式 */
+        pointer-events: none;
+        /* 防止高亮区域影响鼠标事件 */
+        display: none;
+        /* 默认隐藏 */
+    }
+</style>
+
+<div class="apple-container">
+    <img src="./doge.jpg" alt="Apples" class="apple-img" usemap="#apple-map">
+    <div class="highlight" id="highlight"></div>
+    <map name="apple-map">
+        <!-- 定义矩形区域 -->
+        <area shape="rect" coords="100,50,200,150" alt="Apple 1" data-info="Apple 1 Info">
+        <!-- 定义圆形区域 -->
+        <area shape="circle" coords="300,100,50" alt="Apple 2" data-info="Apple 2 Info">
+    </map>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const highlight = document.getElementById('highlight');
+        const areas = document.querySelectorAll('map[name="apple-map"] area');
+
+        // 监听鼠标移动事件
+        document.addEventListener('mousemove', function (event) {
+            areas.forEach(area => {
+                const shape = area.getAttribute('shape');
+                const coords = area.getAttribute('coords').split(',').map(Number);
+
+                if (shape === 'rect') {
+                    const [x1, y1, x2, y2] = coords;
+                    // 判断鼠标是否在矩形区域内
+                    if (event.pageX >= x1 && event.pageX <= x2 && event.pageY >= y1 && event.pageY <= y2) {
+                        highlight.style.width = (x2 - x1) + 'px';
+                        highlight.style.height = (y2 - y1) + 'px';
+                        highlight.style.left = x1 + 'px';
+                        highlight.style.top = y1 + 'px';
+                        highlight.style.borderRadius = '0'; // 设置矩形边框无圆角
+                        highlight.style.display = 'block';
+
+                        // 可以在这里处理高亮效果或其他操作
+                        const info = area.getAttribute('data-info');
+                        console.log('Mouse over rectangle:', info);
+                    }
+                } else if (shape === 'circle') {
+                    const [cx, cy, r] = coords;
+                    // 计算鼠标位置和圆心的距离
+                    const distance = Math.sqrt(Math.pow(event.pageX - cx, 2) + Math.pow(event.pageY - cy, 2));
+
+                    // 判断鼠标是否在圆形区域内
+                    if (distance <= r) {
+                        highlight.style.width = r * 2 + 'px';
+                        highlight.style.height = r * 2 + 'px';
+                        highlight.style.left = cx - r + 'px';
+                        highlight.style.top = cy - r + 'px';
+                        highlight.style.borderRadius = '50%'; // 设置圆形边框为圆形
+                        highlight.style.display = 'block';
+
+                        // 可以在这里处理高亮效果或其他操作
+                        const info = area.getAttribute('data-info');
+                        console.log('Mouse over circle:', info);
+                    }
+                }
+            });
+        });
+
+        // 鼠标离开容器时隐藏高亮效果
+        document.addEventListener('mouseleave', function () {
+            highlight.style.display = 'none';
+        });
+    });
+
+</script>
