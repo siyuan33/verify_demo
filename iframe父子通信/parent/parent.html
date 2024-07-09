@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <iframe id='testIframe' name='test' src='http://127.0.0.1:5500/child/child.html' frameborder='0' scrolling='no'>
+    </iframe>
+
+    <script type="text/javascript">
+        // function parentConsole(data) {
+        //     console.log(data)
+        // }
+        document.getElementById('testIframe').onload = function () {
+            test.window.postMessage('parent to child', 'http://127.0.0.1:5500')
+        }
+        window.addEventListener('message', e => {
+            // 通过origin对消息进行过滤，避免遭到XSS攻击
+            if (e.origin === 'http://127.0.0.1:5500') {
+                console.log(e.origin) // 子页面所在的域
+                console.log(e.data)  // 子页面发送的消息, hello, parent!
+            }
+        }, false);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="open_file">打开文件</button>
+    <button id="open_filedir">打开文件夹</button>
+</body>
+<script>
+    const fileList = []
+    const codeText = ""
+    const currentIndex = 0
+    const showCode = async (item, index) => {
+        const file = await item.fileHandle.getFile()
+        const text = await file.text()
+        codeText = text
+        currentIndex = index
+    }
+    // 添加点击事件
+    document.getElementById("open_file").addEventListener("click", async () => {
+        const res = await window.showOpenFilePicker()
+        console.log(res)
+    })
+    document
+        .getElementById("open_filedir")
+        .addEventListener("click", async () => {
+            const res = await window.showDirectoryPicker({})
+            console.log(res)
+            const detalAction = async (obj) => {
+                if (obj.entries) {
+                    const dirs = obj.entries()
+                    for await (const entry of dirs) {
+                        if (entry[1].entries) {
+                            // 文件夹，递归处理
+                            detalAction(entry[1])
+                        } else {
+                            // 文件
+                            fileList.push({
+                                name: entry[0],
+                                path: obj.name,
+                                fileHandle: entry[1],
+                            })
+                        }
+                    }
+                }
+            }
+            await detalAction(res)
+            // showCode(fileList[0], 0)
+            console.log("--fileList--", fileList)
+        });
+</script>
+
+</html>

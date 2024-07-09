@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            overflow-y: auto;
+            /* Add scroll if needed */
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .file-icon {
+            width: 100px;
+            height: 100px;
+            background-color: #e0e0e0;
+            margin: 10px;
+            text-align: center;
+            line-height: 100px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .file-name {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 5px 0;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-icon:hover .file-name {
+            opacity: 1;
+        }
+
+        .file-tree {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .file-tree li {
+            padding-left: 20px;
+            cursor: pointer;
+        }
+
+        .file-tree li.directory::before {
+            content: "\25b8";
+            margin-right: 5px;
+        }
+
+        .file-tree li.file::before {
+            content: "\25cf";
+            margin-right: 5px;
+        }
+
+        .file-tree li:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <h2>File Explorer</h2>
+            <ul class="file-tree">
+                <li class="directory">Documents
+                    <ul style="display:none;">
+                        <li class="file">File 1.txt</li>
+                        <li class="file">File 2.docx</li>
+                    </ul>
+                </li>
+                <li class="directory">Pictures
+                    <ul style="display:none;">
+                        <li class="file">Image 1.jpg</li>
+                        <li class="file">Image 2.png</li>
+                    </ul>
+                </li>
+                <li class="directory">Videos
+                    <ul style="display:none;">
+                        <li class="file">Video 1.mp4</li>
+                        <li class="file">Video 2.mov</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="main-content" id="main-content">
+            <!-- File icons will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebar = document.getElementById("sidebar")
+            const mainContent = document.getElementById("main-content")
+
+            sidebar.addEventListener("click", function (e) {
+                const target = e.target
+                if (target.classList.contains("directory")) {
+                    target.querySelector("ul").style.display = (target.querySelector("ul").style.display === "none") ? "block" : "none"
+                }
+            })
+
+            const files = [
+                { name: "File 1", type: "txt" },
+                { name: "File 2", type: "docx" },
+                { name: "Image 1", type: "jpg" },
+                { name: "Image 2", type: "png" },
+                { name: "Video 1", type: "mp4" },
+                { name: "Video 2", type: "mov" }
+            ]
+
+            files.forEach(function (file) {
+                const fileIcon = document.createElement("div")
+                fileIcon.classList.add("file-icon")
+                fileIcon.innerHTML = file.name + "." + file.type
+                mainContent.appendChild(fileIcon)
+            })
+        });
+    </script>
+
+</body>
+
+</html>

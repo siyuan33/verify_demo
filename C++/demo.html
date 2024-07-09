@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>海洋工程问答对话页面</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .message {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 8px;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      .user-message {
+        background-color: #007bff;
+        color: #fff;
+        text-align: right;
+      }
+
+      .bot-message {
+        background-color: #4caf50;
+        color: #fff;
+        text-align: left;
+      }
+
+      .message p {
+        margin: 5px 0;
+      }
+
+      .message p:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        font-weight: bold;
+      }
+
+      .input-container {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      input[type="text"] {
+        width: calc(100% - 78px);
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      input[type="submit"] {
+        width: 70px;
+        padding: 8px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="message bot-message">
+        <p>
+          <strong>机器人：</strong
+          >欢迎来到海洋工程问答页面，请问有什么可以帮到您的？
+        </p>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <form id="question-form">
+        <input
+          type="text"
+          id="question-input"
+          placeholder="请输入您的问题..."
+        />
+        <input type="submit" value="发送" />
+      </form>
+    </div>
+  </body>
+  <script>
+    const responses = [
+      "感谢您的提问，请稍等，我会尽快为您解答。",
+      "让我来帮您解答这个问题。",
+      "这是一个很好的问题，让我想一想怎么回答。",
+      "让我查一下资料，马上回来。",
+      "哦，这个问题很有意思！",
+    ];
+
+    document
+      .getElementById("question-form")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        const questionInput = document.getElementById("question-input");
+        const question = questionInput.value.trim();
+        if (question !== "") {
+          addMessage("user", question);
+          const randomResponse =
+            responses[Math.floor(Math.random() * responses.length)];
+          addMessage("bot", randomResponse);
+          questionInput.value = "";
+        }
+      });
+
+    function addMessage(sender, message) {
+      const container = document.createElement("div");
+      container.classList.add("message");
+      container.classList.add(
+        sender === "user" ? "user-message" : "bot-message"
+      );
+      container.innerHTML = `<p><strong>${
+        sender === "user" ? "你" : "机器人"
+      }：</strong>${message}</p>`;
+      document.querySelector(".container").appendChild(container);
+    }
+  </script>
+</html>

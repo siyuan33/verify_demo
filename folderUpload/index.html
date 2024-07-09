@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Folder</title>
+  </head>
+  <body>
+    <h1>Upload Folder</h1>
+    <input type="file" id="folderInput" webkitdirectory directory multiple />
+    <button onclick="uploadFolder()">Upload Folder</button>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      function uploadFolder() {
+        const input = document.getElementById("folderInput");
+        const files = input.files;
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+          formData.append("files", files[i]);
+        }
+        axios
+          .post("localhost:3003/upload-folder", formData)
+          .then((response) => {
+            console.log("Folder uploaded successfully:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error uploading folder:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
